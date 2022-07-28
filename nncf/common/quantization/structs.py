@@ -313,6 +313,7 @@ class UnifiedScaleType(Enum):
     UNIFY_ONLY_PER_TENSOR = 0
     UNIFY_ALWAYS = 1
 
+
 class QuantizationPreset(Enum):
     PERFORMANCE = 'performance'
     MIXED = 'mixed'
@@ -327,5 +328,5 @@ class QuantizationPreset(Enum):
 
     def get_params_configured_by_preset(self, quant_group: QuantizerGroup) -> Dict:
         if quant_group == QuantizerGroup.ACTIVATIONS and self == QuantizationPreset.MIXED:
-            return  {'mode': QuantizationMode.ASYMMETRIC}
-        return {'mode' : QuantizationMode.SYMMETRIC}
+            return {'mode': QuantizationMode.ASYMMETRIC}
+        return {'mode': QuantizationMode.SYMMETRIC}

@@ -530,7 +530,7 @@ class QuantizationBuilder(PTCompressionAlgorithmBuilder):
             self._algo_config.get('initializer', {}))
 
     def _parse_range_init_params(self) -> Optional[PTRangeInitParams]:
-        range_init_params = extract_range_init_params(self.config)
+        range_init_params = extract_range_init_params(self.config, self.name)
         return PTRangeInitParams(**range_init_params) if range_init_params is not None else None
 
     def _parse_precision_init_params(self, initializer_config: Dict) -> Tuple[str, BasePrecisionInitParams]:
@@ -907,8 +907,8 @@ class QuantizationBuilder(PTCompressionAlgorithmBuilder):
                     qp_id_vs_quant_module_id_dict[qp_id] = already_weight_quantized_shared_layers[layer_name]
                     continue
 
-            qspec = quantizer_setup.quantization_points[qp_id].qspec
-            tp = quantizer_setup.quantization_points[qp_id].target_point
+            qspec = qp.qspec
+            tp = qp.target_point
 
             range_init_minmax_values = None
             if minmax_values_for_range_init:
@@ -1224,7 +1224,8 @@ class QuantizationBuilder(PTCompressionAlgorithmBuilder):
             bn_adapt_params = self._parse_bn_adapt_params()
             if bn_adapt_params is not None:
                 bn_adaptation = BatchnormAdaptationAlgorithm(
-                    **extract_bn_adaptation_init_params(self.config, 'quantization'))
+                    **extract_bn_adaptation_init_params(self.config, self.name)
+                )
                 bn_adaptation.run(model)
 
 
@@ -1424,7 +1425,7 @@ class QuantizationController(QuantizationControllerBase):
         stats = collector.collect()
 
         nncf_stats = NNCFStatistics()
-        nncf_stats.register('quantization', stats)
+        nncf_stats.register(self.name, stats)
         return nncf_stats
 
 

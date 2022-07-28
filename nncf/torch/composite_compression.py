@@ -60,8 +60,8 @@ class PTCompositeCompressionAlgorithmBuilder(
 
     def apply_to(self, model: NNCFNetwork) -> NNCFNetwork:
         transformer = PTModelTransformer(model)
-        layout = self.get_transformation_layout(model)
-        transformed_model = transformer.transform(layout)
+        transformation_layout = self.get_transformation_layout(model)
+        transformed_model = transformer.transform(transformation_layout)
 
         self.initialize(transformed_model)
 

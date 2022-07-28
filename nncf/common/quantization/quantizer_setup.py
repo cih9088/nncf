@@ -221,6 +221,7 @@ class MultiConfigQuantizationPoint(QuantizationPointBase):
     def get_all_configs_list(self) -> List[QuantizerConfig]:
         return self.possible_qconfigs
 
+
 class QuantizerSetupBase:
     def __init__(self):
         self.quantization_points = {}  # type: Dict[QuantizationPointId, QuantizationPointBase]
